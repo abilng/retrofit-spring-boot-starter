@@ -1,9 +1,11 @@
 package in.abilng.springboot.retrofit.autoconfigure;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import in.abilng.springboot.retrofit.config.KeyCloakProperties;
 import in.abilng.springboot.retrofit.config.RetroFitProperties;
 import in.abilng.springboot.retrofit.convertor.QualifiedTypeConverterFactory;
 import in.abilng.springboot.retrofit.core.RetrofitClientsRegistrar;
+import in.abilng.springboot.retrofit.interceptor.ServiceAccountInterceptor;
 import in.abilng.springboot.retrofit.utils.ObservationUtils;
 import io.micrometer.core.instrument.binder.okhttp3.OkHttpObservationInterceptor;
 import io.micrometer.observation.ObservationRegistry;
@@ -42,7 +44,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 @AutoConfiguration
 @AutoConfigureAfter(JacksonAutoConfiguration.class)
 @Import(RetrofitClientsRegistrar.class)
-@EnableConfigurationProperties({RetrofitAutoConfiguration.class})
+@EnableConfigurationProperties({KeyCloakProperties.class, RetrofitAutoConfiguration.class})
 public class RetrofitAutoConfiguration {
 
     /**
@@ -163,6 +165,21 @@ public class RetrofitAutoConfiguration {
                             observationRegistry.getIfAvailable(), "http.client.request")
                     .uriMapper(ObservationUtils::getUri)
                     .build();
+        }
+
+        /**
+         * Service account interceptor.
+         *
+         * @param properties the KeyCloakProperties properties
+         * @return the interceptor
+         */
+        @Bean
+        @ConditionalOnProperty(
+                prefix = KeyCloakProperties.PROPERTY_PREFIX,
+                name = "enabled",
+                havingValue = "true")
+        public Interceptor serviceAccountInterceptor(KeyCloakProperties properties) {
+            return new ServiceAccountInterceptor(properties);
         }
     }
 
