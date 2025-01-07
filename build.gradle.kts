@@ -173,3 +173,32 @@ tasks {
         dependsOn(":updateGitHooks")
     }
 }
+
+//publishing {
+//    publications.create<MavenPublication>("maven") {
+//        from(components["java"])
+//        suppressPomMetadataWarningsFor("optionalApiElements")
+//        suppressPomMetadataWarningsFor("optionalRuntimeElements")
+//    }
+//
+//    publications {
+//        repositories {
+//            maven {
+//                name = "OSSRH"
+//                url = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+//                credentials {
+//                    username = System.getenv("MAVEN_USERNAME")
+//                    password = System.getenv("MAVEN_PASSWORD")
+//                }
+//            }
+//            maven {
+//            name = "GitHubPackages"
+//                url = "https://maven.pkg.github.com/octocat/hello-world"
+//                credentials {
+//                    username = System.getenv("GITHUB_ACTOR")
+//                    password = System.getenv("GITHUB_TOKEN")
+//                }
+//            }
+//        }
+//    }
+//}
