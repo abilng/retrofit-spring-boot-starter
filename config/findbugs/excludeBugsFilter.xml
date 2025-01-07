@@ -1,0 +1,46 @@
+<!-- This file specifies a spotbugs filter for excluding reports that
+     should not be considered errors.
+
+     The format of this file is documented at:
+
+       https://spotbugs.readthedocs.io/en/latest/filter.html
+
+     When possible, please specify the full names of the bug codes,
+     using the pattern attribute, to make it clearer what reports are
+     being suppressed.  You can find a listing of codes at:
+
+       https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html
+  -->
+
+<FindBugsFilter>
+    <!-- Ignore spotbugs reports from incomplete detectors -->
+    <Match>
+        <Bug pattern="TESTING"/>
+    </Match>
+
+    <!-- We don't mind having redundant checks for null, it is more error prone to later changes -->
+    <Match>
+        <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE"/>
+    </Match>
+
+    <!-- Ignore negating result of compareTo -->
+    <Match>
+        <Bug pattern="RV_NEGATING_RESULT_OF_COMPARETO"/>
+    </Match>
+
+    <!-- Ignore class naming convention issues -->
+    <Match>
+        <Bug pattern="NM_CLASS_NAMING_CONVENTION"/>
+    </Match>
+
+    <!-- Ignore returning references to internal representations of objects -->
+    <Match>
+        <Bug pattern="EI_EXPOSE_REP"/>
+    </Match>
+
+    <!-- Ignoring when internal representation stores reference to external representation -->
+    <Match>
+        <Bug pattern="EI_EXPOSE_REP2"/>
+    </Match>
+
+</FindBugsFilter>
