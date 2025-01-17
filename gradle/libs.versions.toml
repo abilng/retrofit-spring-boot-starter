@@ -33,6 +33,10 @@ retrofit2-xml = { module = "com.squareup.retrofit2:converter-jaxb3", version.ref
 retrofit2-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "retrofit2" }
 retrofit2-retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit2" }
 
+jaxb-runtime = { module = "org.glassfish.jaxb:jaxb-runtime" }
+jaxb-bind = { module = "jakarta.xml.bind:jakarta.xml.bind-api" }
+
+
 ## resilience4j
 resilience4j-circuitbreaker = { module = "io.github.resilience4j:resilience4j-circuitbreaker", version.ref = "resilience4j" }
 resilience4j-retry = { module = "io.github.resilience4j:resilience4j-retry", version.ref = "resilience4j" }

@@ -2,6 +2,7 @@ package in.abilng.springboot.retrofit.utils;
 
 import java.lang.annotation.Annotation;
 import java.util.Optional;
+import lombok.experimental.UtilityClass;
 import okhttp3.Request;
 import retrofit2.Invocation;
 import retrofit2.http.DELETE;
@@ -13,6 +14,7 @@ import retrofit2.http.PUT;
 /**
  * The Observation utils.
  */
+@UtilityClass
 public class ObservationUtils {
 
     /**
@@ -28,7 +30,7 @@ public class ObservationUtils {
                 .or(() -> getAnnotation(request, PUT.class).map(PUT::value))
                 .or(() -> getAnnotation(request, PATCH.class).map(PATCH::value))
                 .or(() -> getAnnotation(request, DELETE.class).map(DELETE::value))
-                .orElse("none");
+                .orElse("unknown");
     }
 
     private static <T extends Annotation> Optional<T> getAnnotation(

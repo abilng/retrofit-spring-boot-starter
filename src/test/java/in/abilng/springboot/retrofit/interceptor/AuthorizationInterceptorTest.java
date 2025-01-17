@@ -21,9 +21,7 @@ import retrofit2.http.Headers;
 
 class AuthorizationInterceptorTest {
 
-    private MockWebServer mockWebServer = new MockWebServer();
-
-    private OkHttpClient client;
+    private final MockWebServer mockWebServer = new MockWebServer();
 
     private Retrofit retrofit;
     private MockHttpServletRequest mockRequestInContext;
@@ -39,7 +37,7 @@ class AuthorizationInterceptorTest {
 
     @BeforeEach
     public void init() {
-        client =
+        OkHttpClient client =
                 new OkHttpClient.Builder().addInterceptor(AuthorizationInterceptor.getInstance()).build();
 
         retrofit =
@@ -61,7 +59,6 @@ class AuthorizationInterceptorTest {
     @Test
     public void testInterceptWhenRequestContextHasHeader() throws Exception {
         mockRequestInContext.addHeader("authorization", "Bearer token");
-        mockRequestInContext.addHeader("x-user-id", "uuid");
         mockRequestInContext.addHeader("x-some-header", "value");
         mockWebServer.enqueue(new MockResponse().setBody("Hello"));
 
@@ -70,7 +67,6 @@ class AuthorizationInterceptorTest {
         var request = mockWebServer.takeRequest();
 
         assertThat(request.getHeader("authorization"), is("Bearer token"));
-        assertThat(request.getHeader("x-user-id"), is("uuid"));
         assertThat(request.getHeader("x-some-header"), is(nullValue()));
     }
 

@@ -93,6 +93,7 @@ tasks {
     }
 
     test {
+        useJUnitPlatform()
         finalizedBy(jacocoTestReport) // report is always generated after tests run
         reports {
             html.outputLocation = rootProject.layout.buildDirectory.dir("reports/unit-test/${project.name}/html").get().asFile
@@ -139,18 +140,27 @@ dependencies {
     optional(libs.retrofit2.xml)
     optional(libs.okhttp3.logging.interceptor)
     optional(libs.micrometer.core)
+    optional(libs.micrometer.tracing)
+    optional(libs.micrometer.otel)
 
     compileOnly(libs.findbugs)
     compileOnly(libs.spotbugs.annotations)
     compileOnly(libs.spring.boot.autoconfigure.processor)
     compileOnly(libs.spring.boot.configuration.processor)
     compileOnly(libs.lombok)
+
     annotationProcessor(libs.lombok)
     annotationProcessor(libs.spring.boot.configuration.processor)
     annotationProcessor(libs.spring.boot.autoconfigure.processor)
+
     testImplementation(libs.spring.boot.test)
     testImplementation(libs.junit)
     testImplementation(libs.okhttp3.mockwebserver)
+    testImplementation(libs.jaxb.runtime)
+    testImplementation(libs.jaxb.bind)
+
+    testCompileOnly(libs.lombok)
+    testAnnotationProcessor(libs.lombok)
 }
 
 tasks {
