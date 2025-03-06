@@ -189,7 +189,7 @@ publishing {
                 val releasesRepoUrl = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
                 val snapshotsRepoUrl = uri("https://oss.sonatype.org/content/repositories/snapshots/")
                 name = "OSSRH"
-                url = if(version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
+                url = if(version.toString().endsWith("-SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
                 credentials {
                     username = System.getenv("MAVEN_USERNAME")
                     password = System.getenv("MAVEN_PASSWORD")
@@ -207,9 +207,14 @@ publishing {
     }
 }
 
-signing {
-    val signingKey: String? by project
-    val signingPassword: String? by project
-    useInMemoryPgpKeys(signingKey, signingPassword)
-    sign(publishing.publications["maven"])
+val signingKey: String? by project
+val signingPassword: String? by project
+
+if (!version.toString().endsWith("-SNAPSHOT") && (signingPassword != null || signingKey != null)) {
+    signing {
+        if (signingKey != null) {
+            useInMemoryPgpKeys(signingKey, signingPassword)
+        }
+        sign(publishing.publications["maven"])
+    }
 }
