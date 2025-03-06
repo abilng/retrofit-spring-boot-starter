@@ -14,7 +14,7 @@ plugins {
     alias(libs.plugins.springboot) apply false
 }
 
-group = "in.abilng.spring"
+group = "in.abilng"
 description = "Spring Boot :: Starter :: Retrofit"
 
 dependencyManagement {
