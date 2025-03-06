@@ -2,6 +2,8 @@ plugins {
     idea
     java
     `java-library`
+    `signing`
+    `maven-publish`
     pmd
     jacoco
     checkstyle
@@ -172,4 +174,42 @@ tasks {
     build {
         dependsOn(":updateGitHooks")
     }
+}
+
+publishing {
+    publications.create<MavenPublication>("maven") {
+        from(components["java"])
+        suppressPomMetadataWarningsFor("optionalApiElements")
+        suppressPomMetadataWarningsFor("optionalRuntimeElements")
+    }
+
+    publications {
+        repositories {
+            maven {
+                val releasesRepoUrl = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
+                val snapshotsRepoUrl = uri("https://oss.sonatype.org/content/repositories/snapshots/")
+                name = "OSSRH"
+                url = if(version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
+                credentials {
+                    username = System.getenv("MAVEN_USERNAME")
+                    password = System.getenv("MAVEN_PASSWORD")
+                }
+            }
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/abilng/retrofit-spring-boot-starter")
+                credentials {
+                    username = System.getenv("GITHUB_ACTOR")
+                    password = System.getenv("GITHUB_TOKEN")
+                }
+            }
+        }
+    }
+}
+
+signing {
+    val signingKey: String? by project
+    val signingPassword: String? by project
+    useInMemoryPgpKeys(signingKey, signingPassword)
+    sign(publishing.publications["maven"])
 }
