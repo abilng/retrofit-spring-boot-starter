@@ -74,3 +74,4 @@ spring = { id = "io.spring.dependency-management", version.ref = "spring" }
 spotless = { id = "com.diffplug.spotless", version = "6.25.0" }
 release = { id = "net.researchgate.release", version = "3.0.2" }
 spotbugs = { id = "com.github.spotbugs", version = "6.0.7" }
+nexus-publish = { id = "io.github.gradle-nexus.publish-plugin", version = "2.0.0" }

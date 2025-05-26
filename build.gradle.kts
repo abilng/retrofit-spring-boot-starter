@@ -2,11 +2,12 @@ plugins {
     idea
     java
     `java-library`
-    `signing`
     `maven-publish`
+    signing
     pmd
     jacoco
     checkstyle
+    alias(libs.plugins.nexus.publish)
     alias(libs.plugins.spotless)
     alias(libs.plugins.release)
     alias(libs.plugins.spotbugs)
@@ -14,8 +15,11 @@ plugins {
     alias(libs.plugins.springboot) apply false
 }
 
-group = "in.abilng"
+group = "in.abilng.spring"
 description = "Spring Boot :: Starter :: Retrofit"
+
+var gitOrg = "abilng"
+var gitRepo = "spring-boot-starter"
 
 dependencyManagement {
     imports {
@@ -174,6 +178,11 @@ tasks {
     build {
         dependsOn(":updateGitHooks")
     }
+
+    afterReleaseBuild {
+        dependsOn(publish, "publishToSonatype","closeAndReleaseSonatypeStagingRepository")
+    }
+
 }
 
 publishing {
@@ -181,39 +190,72 @@ publishing {
         from(components["java"])
         suppressPomMetadataWarningsFor("optionalApiElements")
         suppressPomMetadataWarningsFor("optionalRuntimeElements")
+
+        pom {
+            url.set("https://github.com/${gitOrg}/${gitRepo}")
+            description.set(project.description)
+            developers {
+                developer {
+                    id.set("abilng")
+                    name.set("Abil N George")
+                    email.set("mail@abilng.com")
+                }
+            }
+            licenses {
+                license {
+                    name.set("The MIT License")
+                    url.set("https://opensource.org/license/mit")
+                }
+            }
+            scm {
+                connection.set("scm:git:git@github.com:${gitOrg}/${gitRepo}.git")
+                developerConnection.set("scm:git:ssh://github.com:${gitOrg}/${gitRepo}.git")
+                url.set("https://github.com/${gitOrg}/${gitRepo}")
+            }
+        }
     }
 
     publications {
         repositories {
-            maven {
-                val releasesRepoUrl = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
-                val snapshotsRepoUrl = uri("https://oss.sonatype.org/content/repositories/snapshots/")
-                name = "OSSRH"
-                url = if(version.toString().endsWith("-SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
-                credentials {
-                    username = System.getenv("MAVEN_USERNAME")
-                    password = System.getenv("MAVEN_PASSWORD")
-                }
-            }
-            maven {
-                name = "GitHubPackages"
-                url = uri("https://maven.pkg.github.com/abilng/retrofit-spring-boot-starter")
-                credentials {
-                    username = System.getenv("GITHUB_ACTOR")
-                    password = System.getenv("GITHUB_TOKEN")
+            System.getenv("GITHUB_ACTOR")?.let {
+                maven {
+                    name = "GitHubPackages"
+                    url = uri("https://maven.pkg.github.com/abilng/retrofit-spring-boot-starter")
+                    credentials {
+                        username = System.getenv("GITHUB_ACTOR")
+                        password = System.getenv("GITHUB_TOKEN")
+                    }
                 }
             }
         }
     }
 }
 
-val signingKey: String? by project
-val signingPassword: String? by project
+nexusPublishing {
+    repositories {
+        System.getenv("MAVEN_USERNAME")?.let {
+            sonatype {
+                nexusUrl = uri( "https://ossrh-staging-api.central.sonatype.com/service/local/" )
+                snapshotRepositoryUrl = uri( "https://central.sonatype.com/repository/maven-snapshots/" )
+                username = System.getenv("MAVEN_USERNAME")
+                password = System.getenv("MAVEN_PASSWORD")
+            }
+        }
+    }
+}
 
-if (!version.toString().endsWith("-SNAPSHOT") && (signingPassword != null || signingKey != null)) {
+
+
+
+if (!version.toString().endsWith("-SNAPSHOT") && System.getenv("MAVEN_USERNAME") != null) {
     signing {
+        val signingKey: String? by project
+        val signingPassword: String? by project
+
         if (signingKey != null) {
             useInMemoryPgpKeys(signingKey, signingPassword)
+        } else {
+            useGpgCmd()
         }
         sign(publishing.publications["maven"])
     }
