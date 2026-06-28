@@ -4,10 +4,9 @@
 [versions]
 okhttp = "4.12.0"
 retrofit2 = "2.11.0"
-spring = "1.1.4"
-spring-boot = "3.4.+"
+spring = "1.1.7"
+spring-boot = "4.1.+"
 resilience4j = "2.2.0"
-junit5 = "5.9.1"
 mockito="5.10.0"
 
 
@@ -17,7 +16,6 @@ mockito="5.10.0"
 spring-boot-configuration-processor = { module = "org.springframework.boot:spring-boot-configuration-processor" }
 spring-boot-autoconfigure-processor = { module = "org.springframework.boot:spring-boot-autoconfigure-processor" }
 spring-boot-starter = { module = "org.springframework.boot:spring-boot-starter" }
-spring-boot-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
 spring-boot-web = { module = "org.springframework.boot:spring-boot-starter-web" }
 spring-boot-test = { module = "org.springframework.boot:spring-boot-starter-test" }
 
@@ -44,10 +42,7 @@ resilience4j-retry = { module = "io.github.resilience4j:resilience4j-retry", ver
 ## micrometer
 micrometer-core = { module = "io.micrometer:micrometer-core" }
 micrometer-tracing = { module = "io.micrometer:micrometer-tracing" }
-micrometer-prometheus = { module = "io.micrometer:micrometer-registry-prometheus" }
 micrometer-otel = { module = "io.micrometer:micrometer-tracing-bridge-otel" }
-micrometer-jvm= {module ="io.github.mweirauch:micrometer-jvm-extras", version="0.2.2"}
-otel-exporter = { module = "io.opentelemetry:opentelemetry-exporter-otlp" }
 
 
 lombok = { module = "org.projectlombok:lombok" }
@@ -55,14 +50,7 @@ slf4j-api = { module = "org.slf4j:slf4j-api" }
 findbugs = { module = "com.google.code.findbugs:jsr305", version = "3.0.2" }
 
 # junit
-junit5-bom = { module = "org.junit:junit-bom", version.ref = "junit5" }
-junit5-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
-junit5-platform = { module = "org.junit.platform:junit-platform-launcher"}
-junit = { module = "junit:junit" }
-json-unit = {module = "net.javacrumbs.json-unit:json-unit", version = '3.2.4'}
-hamcrest-core = {module = "org.hamcrest:hamcrest", version = '2.2'}
-mockito-core = {module ="org.mockito:mockito-core", version.ref = "mockito"}
-awaitility = {module ="org.awaitility:awaitility"}
+junit-platform = { module = "org.junit.platform:junit-platform-launcher"}
 
 ## spotbugs
 spotbugs-annotations = {module ="com.github.spotbugs:spotbugs-annotations", version ="4.8.5"}
