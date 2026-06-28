@@ -160,7 +160,7 @@ dependencies {
     annotationProcessor(libs.spring.boot.autoconfigure.processor)
 
     testImplementation(libs.spring.boot.test)
-    testImplementation(libs.junit)
+    testRuntimeOnly(libs.junit.platform)
     testImplementation(libs.okhttp3.mockwebserver)
     testImplementation(libs.jaxb.runtime)
     testImplementation(libs.jaxb.bind)
